@@ -1,0 +1,15 @@
+[submodule "pack/plugins/start/a_vim"]
+	path = pack/plugins/start/a_vim
+	url = https://github.com/vim-scripts/a.vim.git
+[submodule "pack/plugins/start/ctrlp"]
+	path = pack/plugins/start/ctrlp
+	url = https://github.com/kien/ctrlp.vim.git
+[submodule "pack/plugins/start/nerdtree"]
+	path = pack/plugins/start/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "pack/plugins/opt/cscope"]
+	path = pack/plugins/opt/cscope
+	url = https://github.com/SpaceVim/cscope.vim.git
+[submodule "pack/plugins/start/SimpylFold"]
+	path = pack/plugins/start/SimpylFold
+	url = https://github.com/tmhedberg/SimpylFold.git
