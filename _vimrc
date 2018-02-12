@@ -140,7 +140,7 @@ endif
 "-------------------------------------------------------------------------------
 " 
 set wildmenu
-set wildignore=*.svn,*.svn-base,*.bak,*.o,*.e,*~
+set wildignore=*.svn,*.svn-base,*.bak,*.swp,*.zip,*.so,*.o,*.e,*.pyc,*.pyo,*~
 set suffixes=.svn
 
 
@@ -300,7 +300,7 @@ map <silent> <leader>4 :diffget 4<CR> :diffupdate<CR>
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
 let g:ctrlp_working_path_mode = 'ra'
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip     " Linux/MacOSX
+set wildignore+=*/tmp/*,*.so,*.pyc,*.pyo,*.swp,*.zip     " Linux/MacOSX
 set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
 let g:ctrlp_custom_ignore = {
