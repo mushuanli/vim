@@ -1,144 +1,74 @@
 set nocompatible
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-behave mswin
 
-set diffexpr=MyDiff()
-function MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      if empty(&shellxquote)
-        let l:shxq_sav = ''
-        set shellxquote&
-      endif
-      let cmd = '"' . $VIMRUNTIME . '\diff"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
-  if exists('l:shxq_sav')
-    let &shellxquote=l:shxq_sav
-  endif
-endfunction
+let s:is_windows = (has("win32") || has("win64"))
+let s:is_gui = has("gui_running")
 
-set nocompatible
-"set paste
-source $VIMRUNTIME/vimrc_example.vim
-if has("win32")
-    source $VIMRUNTIME/mswin.vim
-    set renderoptions=type:directx,renmode:5,taamode:1
-    
-    "behave mswin
+" SYNTAX HIGHLIGHTING... on if terminal has colors
+if &t_Co > 2 || s:is_gui
+    syntax on
 endif
 
-behave xterm
-
-set ffs=unix,dos
-set fencs=cp936,ucs-bom,default,latin1,utf-8    ",ucs-bom
-set langmenu=none	" 使用英文菜单
-set tw=0
-
-if has("win32")
-    au GUIEnter * simalt ~x 
-    "nnoremap <silent>  <F2> :!start "D:\tools\dev\Source Insight 3\Insight3.exe" -i  +<C-R>=expand(line("."))<CR> %<CR>
-else
-    set term=screen
-endif
-
-
-
-
-
-if exists('$TMUX')
-    set term=screen-256color
-endif
-
-" 1 height windows
-"set winminheight=1
-
-
-
-set guicursor=a:blinkon0    "   停止闪烁
-if has("gui_running")
-
-    if v:version >= 700
-        set cursorline		" 高亮当前行,在oceandeep布局下显示的不是很清楚，
-        set cursorcolumn
-    endif
-
-    "   win下FixedSys的字体比较好看, unix下bitstream不错
-    "    set guifont=Bitstream_Vera_Sans_Mono:h12:cANSI
-    if has("win32")
-        set guifont=Fixedsys:h12:cGB2312
-    else
-        set guifont=Bitstream\ Vera\ Sans\ Mono\ 16
-    endif
-    set guioptions-=T    " 去掉工具栏,我喜欢显示的范围更大的
-    set guioptions-=m    " 去掉菜单,我喜欢显示的范围更大的
-    set guioptions-=l
-    set guioptions-=L
-    "set guioptions-=r
-    "set guioptions-=R
-
-
-    colorscheme  darkblue "molokai    oceandeep   
-    "let g:molokai_original = 1
-    "colorscheme  molokai   
-    "  desert      " 背景颜色           
-else
-    set t_Co=256
-    " set background=light gives a different style, feel free to choose between them.
-    "set background=dark
-    colors molokai 
-endif
-
-"-------------------------------------------------------------------------------
-" Moving cursor to other windows
-" 
-" shift down   : change window focus to lower one (cyclic)
-" shift up     : change window focus to upper one (cyclic)
-" shift left   : change window focus to one on left
-" shift right  : change window focus to one on right
-"-------------------------------------------------------------------------------
+"_________________________________________________________________________
+" GENERAL SETTINGS
 "
+
+map <F1>    :NERDTreeToggle<cr>
+map <F2>    :TagbarToggle<cr>
+map <F3>    zO
+map <F4>    zc
+map <F5>    zR
+map <F6>    zM
+map <F7>    :cn<CR>
+"map <F12>   :NERDTreeToggle<CR>
+
 nmap <s-down>   <c-w>w
 nmap <s-up>     <c-w>W
 nmap <s-left>   <c-w>h
 nmap <s-right>  <c-w>l
 
+iab #i #include
+iab #d #define
+iab #e #endif
 
-set autoread              " read open files again when changed outside Vim
-"   set autowrite             " write a modified buffer on each :next , ...
-set browsedir  =current   " which directory to use for the file browser
-"set nowrap                " 显示时不自动换行, 看个人爱好, 注掉也不错
+set ffs=unix,dos
+set fencs=cp936,ucs-bom,default,latin1,utf-8    ",ucs-bom
+set langmenu=none	" 使用英文菜单
+set tw=0
+set autoindent          " copy indent from the current line when starting a new line
+set backspace=2         " allow backspacing over everything in insert mode
+set history=50          " keep 50 lines of command line history
 
-"-------------------------------------------------------------------------------
-" Change the working directory to the directory containing the current file
-"-------------------------------------------------------------------------------
-if has("autocmd")
-    " 如果使用cscope或是ctags的话, 最好不要自动切换目录, 不然标志无法定位
-    "  autocmd BufEnter * :lcd %:p:h
-endif
-"-------------------------------------------------------------------------------
+set ignorecase          " search commands are case-insensitive
+set incsearch           " while typing a search command, show matches incrementally
+                        " instead of waiting for you to press enter
+set scs		        " 查找时智能大小写
+set hlsearch	        " hlsearch, 高亮显示查找结果
+
+set mouse=a             " enable mouse interaction
+set mousehide		" Hide the mouse when typing text
+set number              " line numbers at the side
+set ruler               " show the cursor position all the time
+set shiftwidth=4        " pressing >> or << in normal mode indents by 4 characters
+set tabstop=8           " a tab character indents to the 4th (or 8th, 12th, etc.) column
+set sts=4	    " soft tab是4空格, 按一次tab时也是4格, 使用space代替
+set expandtab           " 
+
+set viminfo='20,\"50    " read/write a .viminfo file, don't store more than 50 lines of registers
+set encoding=utf8       " non-ascii characters are encoded with UTF-8 by default
+
+"set formatoptions=croq  " c=autowrap comments, r=continue comment on <enter>,
+                        " o=continue comment on o or O, q=allow format comment with gqgq
+set formatoptions=tcrqn2mB
+set whichwrap+=<,>,[,]
+
+set textwidth=0         " no forced wrapping in any file type (unless overridden)
+set showcmd             " show length of visual selection (docs recommended
+                        " keeping this off when working over slow connections)
+set complete=.,w,b,u    " make autocomplete faster - http://www.mail-archive.com/vim@vim.org/msg03963.html
+set splitright          " create vertical splits to the right
+set splitbelow          " create horizontal splits below
+
 " Filename completion
-" 
-"   wildmenu : command-line completion operates in an enhanced mode
-" wildignore : A file that matches with one of these
-"              patterns is ignored when completing file or directory names.
-"-------------------------------------------------------------------------------
-" 
 set wildmenu
 set wildignore=*.svn,*.svn-base,*.bak,*.swp,*.zip,*.so,*.o,*.e,*.pyc,*.pyo,*~
 set suffixes=.svn
@@ -148,70 +78,97 @@ set suffixes=.svn
 set hidden
 
 
-if v:version >= 700
-    set stal=1        " 当打开多个tab时显示tab,如果只有一个则不显示,tab只在7.0中有效
-endif
-
-" Highlight matching parens
-"set showmatch
+set autoread              " read open files again when changed outside Vim
+"   set autowrite             " write a modified buffer on each :next , ...
+set browsedir=current     " which directory to use for the file browser
 
 
-set number              "   显示行号
-set et			"   TODO    删除
 set ch=2		" Make command line two lines high
-set mousehide		" Hide the mouse when typing text
 let c_comment_strings=1	" I like highlighting strings inside C comments
-
-
-set formatoptions=tcrqn2mB
-set ts=8	    " tab是8空格
-set sw=4	    "shift width,indent时的值是4格, 
-set sts=4	    " soft tab是4空格, 按一次tab时也是4格, 使用space代替
-set bs=2            " 退格键的模式
 set lsp=0	    " space it out a little more (easier to read)
 set vb t_vb=	    " set visual bell and disable screen flash
 
-set ru		    " 在下面显示标尺
-
 set grepprg=grep\ -nH	"   使用grep查找, grep包括在unxutils中
 
-"""""""""""""""""""""""""""""""""""""""
-"   查找的配置
-"""""""""""""""""""""""""""""""""""""""
-set incsearch       " use incremental search
-set ic		    " 查找时忽略大小写
-set is		    " 增量查找
-set scs		    " 查找时智能大小写
-set hlsearch	    " hlsearch, 高亮显示查找结果
-" Wrap on these
-set whichwrap+=<,>,[,]
-"""""""""""""""""""""""""""""""""""""""
-"   自动补全功能
-"   编程快捷键, 按#i 空格时, 自动变成#include
-"""""""""""""""""""""""""""""""""""""""
-iab #i #include
-iab #d #define
-iab #e #endif
+if exists(":tabedit")   " if this version of vim supports tabs...
+    set switchbuf=usetab " when switching buffers, include tabs
+    set tabpagemax=30   " show up to 30 tabs
+endif
+
+if version >= 703       " if version 7.3+ of Vim...
+    set stal=1          " 当打开多个tab时显示tab,如果只有一个则不显示,tab只在7.0中有效
+    set cryptmethod=blowfish " use blowfish encryption for encrytped files
+endif
+
+"_________________________________________________________________________
+" WINDOWS-SPECIFIC
+"
+
+" load some scripts that are packaged with the Windows version of Vim.
+set backup    " enable backup and define the backup file
+set backupext=.bak
+
+behave xterm
+
+if s:is_windows
+    source $VIMRUNTIME/vimrc_example.vim
+    source $VIMRUNTIME/mswin.vim
+
+    "set nobackup
+    set dir=D:\\tmp\\vim\\swap
+    set backupdir=D:\tmp\vim\bak
+    set undodir=D:\\tmp\\vim\\swap
+    "behave mswin
+else
+    set dir=/tmp
+    set backupdir=/tmp
+    set undodir=/tmp
+
+    if exists('$TMUX')
+        set term=screen-256color
+    else
+        set term=screen
+    endif
+endif
 
 
+"_________________________________________________________________________
+" GUI OPTIONS - only affects gvim
+"
+set guicursor=a:blinkon0    "   停止闪烁
+if s:is_gui
+    au GUIEnter * simalt ~x     " Start maximized
+    set guioptions-=T           " No toolbar
+    set guioptions-=m           " No menus
+    set guioptions-=L           " No left scrollbar
+    set guioptions-=r           " No right scrollbar
 
+    if v:version >= 700
+        set cursorline		" 高亮当前行,在oceandeep布局下显示的不是很清楚，
+        set cursorcolumn
+    endif
 
-"""""""""""""""""""""""""""""""""""""""
-"   配置命令模式下的快键键
-"""""""""""""""""""""""""""""""""""""""
-"   Tlist   :taglist, 在左边窗口显示文件中的函数名与定义名
-"   WMToggle	打开/关闭 资源管理器和buf 管理器
-"   zO,zC,zR,zM	折行功能
-"   :cn		grep查找到结果时进入下一个结果
-"map <F1>    :Tlist<cr>
-map <F1>    :NERDTreeToggle<cr>
-map <F2>    :TagbarToggle<cr>
-map <F3>    zO
-map <F4>    zc
-map <F5>    zR
-map <F6>    zM
-map <F7>    :cn<CR>
-map <F12>   :NERDTreeToggle<CR>
+    if s:is_windows
+        set renderoptions=type:directx,renmode:5,taamode:1
+        set guifont=Fixedsys:h12:cGB2312,DejaVu_Sans_Mono:h11,Inconsolata:h11,Consolas:h11
+    else
+        set guifont=Bitstream\ Vera\ Sans\ Mono\ 16
+    endif   
+
+    colorscheme  darkblue "molokai    oceandeep   
+else
+    set t_Co=256
+    colors molokai 
+endif
+
+"-------------------------------------------------------------------------------
+" Change the working directory to the directory containing the current file
+"-------------------------------------------------------------------------------
+if has("autocmd")
+    " 如果使用cscope或是ctags的话, 最好不要自动切换目录, 不然标志无法定位
+    "  autocmd BufEnter * :lcd %:p:h
+endif
+
 
 "NERD Tree
 let NERDChristmasTree=0
@@ -226,23 +183,6 @@ let NERDTreeIgnore=['\.svn$','\.o$','\.ko$','\.cmd$','\~$','\.pyc$','\.pyo$']
 let NERDTreeWinPos = "left" "where NERD tree window is placed on the screen
 let NERDTreeWinSize = 31 "size of the NERD tree
 
-"""""""""""""""""""""""""""""""""""""""
-"   配置备份和交换文件目录
-"   默认vim会把这些文件放在当时目录下, 看起来比较乱
-"""""""""""""""""""""""""""""""""""""""
-set backup    " enable backup and define the backup file
-set backupext=.bak
-" 设置swap文件的目录到dir
-"设置备份文件的目录到backupdir 我不喜欢看到每个目录下都有备份 因为一般备份用不到
-if has("unix")
-    set dir=/tmp
-    set backupdir=/tmp
-else
-    set nobackup
-    set dir=D:\\tmp\\vim\\swap
-    "set backupdir=D:\tmp\vim\bak
-    set undodir=D:\\tmp\\vim\\swap
-endif
 
 """""""""""""""""""""""""""""""""""""""
 "   大文件配置
@@ -341,7 +281,7 @@ if has("autocmd")
 endif
 
 " Nice window title
-if has('title') && (has('gui_running') || &title)
+if has('title') && (s:is_gui || &title)
     set titlestring=
     set titlestring+=%f\                     " file name
     set titlestring+=%h%m%r%w                " flags
@@ -385,7 +325,42 @@ set fillchars=fold:-
 
 
 
+"_________________________________________________________________________
+" ARCANE SETTINGS AND TWEAKS
+"
 
+" xml ftplugin:  Don't automatically create new nesting level for every element.
+" http://www.vim.org/scripts/script.php?script_id=301
+" https://github.com/sukima/xmledit/
+let xml_no_auto_nesting = 1
+
+" When listing directories, hide temporary files or binary files.  Allow
+" gzip/bzip2 though, since Vim can sometimes open those.
+let g:netrw_list_hide=join(['^.\+\.pyc$',
+                           \'^.\+\.pyo$',
+                           \'^.\+\.jpg$',
+                           \'^.\+\.png$',
+                           \'^.\+\.exe$',
+                           \'^.\+\.class$',
+                           \'^.\+\.zip$',
+                           \'^.\+\.pyo$',
+                           \'^.\+\.pyc$',
+                           \'^.\+\.xls[xm]\=$',
+                           \'^.\+\.doc[xm]\=$',
+                           \'^.\+\.ppt[xm]\=$',
+                           \'^.\+\.sqlite3\=$',
+                           \'^.\+\.sqlite3\=$',
+                           \'^\..\+\.sw.$'],
+                           \',')
+let g:netrw_hide=1         " Enable hiding based on g:netrw_list_hide
+let g:netrw_mouse_maps=0   " Ignore mouse clicks
+
+" Use old-fasioned HTML with the Tohtml command, so that it can be pasted into
+" emails.
+let g:html_use_css = 0
+
+" Don't show line numbers when converting to HTML.
+let g:html_number_lines=0
 
 """""""""""""""""""""""""""""""""""""""
 "   插件配置
@@ -435,7 +410,7 @@ if has("eval")
     "	     " let g:miniBufExplForceSyntaxEnable = 1
 
     " Settings for showmarks.vim
-    if has("gui_running")
+    if s:is_gui
         let g:showmarks_enable=1
     else
         let g:showmarks_enable=0
@@ -504,7 +479,7 @@ if has("eval")
 endif
 
 
-if has("win32")
+if s:is_windows
 "   tagtoggle
 " Added to ~/ctags.cnf (On Win7):
 " --langdef=powershell
@@ -542,6 +517,35 @@ let g:ctrlp_custom_ignore = {
 	\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
 	\ }
 
+set diffexpr=MyDiff()
+function MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      if empty(&shellxquote)
+        let l:shxq_sav = ''
+        set shellxquote&
+      endif
+      let cmd = '"' . $VIMRUNTIME . '\diff"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3
+  if exists('l:shxq_sav')
+    let &shellxquote=l:shxq_sav
+  endif
+endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 "	其它不用的
