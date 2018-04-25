@@ -233,13 +233,8 @@ endfunction
 """""""""""""""""""""""""""""""""""""""
 "   根据语法折行, 如c/c++中就是{}
 set foldenable
-if v:version >= 700
-    set foldmethod=syntax   " marker,folder模式为语法
-    "set foldmethod=marker   " marker,folder模式为语法
-else
-    "	vim63中不支持根据语法折行
-    set foldmethod=indent
-endif
+set foldmethod=indent   " marker,folder模式为语法
+autocmd FileType cpp,c setlocal foldmethod=syntax
 
 set foldlevel=100       " Don't autofold anything (but I can still fold manually)
 set foldopen-=search    " don't open folds when you search into them
@@ -261,7 +256,7 @@ let g:sh_fold_enabled += 2     " enable heredoc folding
 let g:sh_fold_enabled += 4     " enable if/do/for folding
 
 " SimpylFold plugin
-let g:SimpylFold_docstring_preview = 1
+"let g:SimpylFold_docstring_preview = 1
 
 let g:load_doxygen_syntax = 0 " 启用源代码中的doxygen注释高亮
 let g:doxygen_enhanced_color = 0    " 对Doxygen注释使用非标准高亮
@@ -598,10 +593,7 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 "	其它不用的
 """"""""""""""""""""""""""""""""""""""""""""""""""""
-" turn off any existing search
-if has("autocmd")
-    "     au VimEnter * nohls
-endif
+
 
 " set showfulltag	    " Show full tags when doing search completion
 
