@@ -11,7 +11,7 @@
 	path = pack/plugins/opt/cscope
 	url = https://github.com/SpaceVim/cscope.vim.git
 [submodule "pack/plugins/start/SimpylFold"]
-	path = pack/plugins/start/SimpylFold
+	path = pack/plugins/opt/SimpylFold
 	url = https://github.com/tmhedberg/SimpylFold.git
 [submodule "pack/plugins/start/tagbar"]
 	path = pack/plugins/start/tagbar
