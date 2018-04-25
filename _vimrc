@@ -12,14 +12,20 @@ endif
 " GENERAL SETTINGS
 "
 
-map <F1>    :NERDTreeToggle<cr>
-map <F2>    :TagbarToggle<cr>
-map <F3>    zO
-map <F4>    zc
-map <F5>    zR
-map <F6>    zM
-map <F7>    :cn<CR>
+map <silent> <F1>    :NERDTreeToggle<cr>
+map <silent> <F2>    :TagbarToggle<cr>
+map <silent> <F3>    zO
+map <silent> <F4>    zc
+map <silent> <F5>    zR
+map <silent> <F6>    zM
+map <silent> <F7>    :cn<CR>
 "map <F12>   :NERDTreeToggle<CR>
+nmap <silent> <C-S-tab> :tabprevious<CR>
+nmap <silent> <C-tab>   :tabnext<CR>
+map  <silent> <C-S-tab> :tabprevious<CR>
+map  <silent> <C-tab>   :tabnext<CR>
+imap <silent> <C-S-tab> <ESC>:tabprevious<CR>i
+imap <silent> <C-tab>   <ESC>:tabnext<CR>i
 
 nmap <s-down>   <c-w>w
 nmap <s-up>     <c-w>W
@@ -34,7 +40,14 @@ set ffs=unix,dos
 set fencs=cp936,ucs-bom,default,latin1,utf-8    ",ucs-bom
 set langmenu=none	" 使用英文菜单
 set tw=0
+set selection=inclusive
+
 set autoindent          " copy indent from the current line when starting a new line
+set nosmartindent
+set cindent
+set cinoptions=:s,ps,ts,cs
+set cinwords=if,else,while,do,for,switch,case
+
 set backspace=2         " allow backspacing over everything in insert mode
 set history=50          " keep 50 lines of command line history
 
@@ -51,7 +64,9 @@ set ruler               " show the cursor position all the time
 set shiftwidth=4        " pressing >> or << in normal mode indents by 4 characters
 set tabstop=8           " a tab character indents to the 4th (or 8th, 12th, etc.) column
 set sts=4	    " soft tab是4空格, 按一次tab时也是4格, 使用space代替
-set expandtab           " 
+set shiftround
+set expandtab 
+set smarttab 
 
 set viminfo='20,\"50    " read/write a .viminfo file, don't store more than 50 lines of registers
 set encoding=utf8       " non-ascii characters are encoded with UTF-8 by default
@@ -69,8 +84,11 @@ set splitright          " create vertical splits to the right
 set splitbelow          " create horizontal splits below
 
 " Filename completion
+set wildmode=longest:full,full
 set wildmenu
-set wildignore=*.svn,*.svn-base,*.bak,*.swp,*.zip,*.so,*.o,*.e,*.pyc,*.pyo,*~
+set wildignore+=*.svn,*.svn-base,*.bak,*.sw?,*.zip,*.so,*.e,*.pyc,*.pyo,*~
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifestg,*.d
 set suffixes=.svn
 
 
@@ -79,7 +97,7 @@ set hidden
 
 
 set autoread              " read open files again when changed outside Vim
-"   set autowrite             " write a modified buffer on each :next , ...
+set autowrite             " write a modified buffer on each shell
 set browsedir=current     " which directory to use for the file browser
 
 
@@ -119,6 +137,10 @@ if s:is_windows
     set backupdir=D:\tmp\vim\bak
     set undodir=D:\\tmp\\vim\\swap
     "behave mswin
+
+    let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
+    let $PATH = $PATH . ";" . s:vimrc_path . '\bin'
+
 else
     set dir=/tmp
     set backupdir=/tmp
@@ -158,7 +180,7 @@ if s:is_gui
     colorscheme  darkblue "molokai    oceandeep   
 else
     set t_Co=256
-    colors molokai 
+    colors darkblue "molokai 
 endif
 
 "-------------------------------------------------------------------------------
@@ -210,8 +232,10 @@ endfunction
 "   折行配置
 """""""""""""""""""""""""""""""""""""""
 "   根据语法折行, 如c/c++中就是{}
+set foldenable
 if v:version >= 700
     set foldmethod=syntax   " marker,folder模式为语法
+    "set foldmethod=marker   " marker,folder模式为语法
 else
     "	vim63中不支持根据语法折行
     set foldmethod=indent
@@ -220,6 +244,30 @@ endif
 set foldlevel=100       " Don't autofold anything (but I can still fold manually)
 set foldopen-=search    " don't open folds when you search into them
 set foldopen-=undo      " don't open folds when you undo stuff
+"set foldopen=block,hor,mark,percent,quickfix,search,tag " what movements open folds
+let g:vimsyn_folding = ''
+let g:vimsyn_folding .= 'a' " augroups
+let g:vimsyn_folding .= 'f' " fold functions
+let g:vimsyn_folding .= 'm' " fold mzscheme script
+let g:vimsyn_folding .= 'p' " fold perl     script
+let g:vimsyn_folding .= 'P' " fold python   script
+let g:vimsyn_folding .= 'r' " fold ruby     script
+let g:vimsyn_folding .= 't' " fold tcl      script
+
+
+let g:sh_fold_enabled = 0      " default, no syntax folding
+let g:sh_fold_enabled += 1     " enable function folding
+let g:sh_fold_enabled += 2     " enable heredoc folding
+let g:sh_fold_enabled += 4     " enable if/do/for folding
+
+" SimpylFold plugin
+let g:SimpylFold_docstring_preview = 1
+
+let g:load_doxygen_syntax = 0 " 启用源代码中的doxygen注释高亮
+let g:doxygen_enhanced_color = 0    " 对Doxygen注释使用非标准高亮
+
+let g:is_bash	   = 1  " 如果没有#!行，缺省认为shell脚本用的是bash
+
 """""""""""""""""""""""""""""""""""""""
 " Perl
 """""""""""""""""""""""""""""""""""""""
