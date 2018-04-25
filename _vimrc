@@ -205,6 +205,7 @@ iab #e #endif
 "   :cn		grep查找到结果时进入下一个结果
 "map <F1>    :Tlist<cr>
 map <F1>    :NERDTreeToggle<cr>
+map <F2>    :TagbarToggle<cr>
 map <F3>    zO
 map <F4>    zc
 map <F5>    zR
@@ -238,9 +239,9 @@ if has("unix")
     set backupdir=/tmp
 else
     set nobackup
-    set dir=D:\tmp\vim\swap
+    set dir=D:\\tmp\\vim\\swap
     "set backupdir=D:\tmp\vim\bak
-    set undodir=D:\tmp\vim\swap
+    set undodir=D:\\tmp\\vim\\swap
 endif
 
 """""""""""""""""""""""""""""""""""""""
@@ -293,22 +294,6 @@ map <silent> <leader>2 :diffget 2<CR> :diffupdate<CR>
 map <silent> <leader>3 :diffget 3<CR> :diffupdate<CR>
 map <silent> <leader>4 :diffget 4<CR> :diffupdate<CR>
 
-
-""""""""""""""""""""""""""""""""""""""
-"   ctrlp
-""""""""""""""""""""""""""""""""""""""
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
-set wildignore+=*/tmp/*,*.so,*.pyc,*.pyo,*.swp,*.zip     " Linux/MacOSX
-set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
-let g:ctrlp_custom_ignore = {
-	\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-	\ 'file': '\v\.(exe|so|dll)$',
-	\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-	\ }
-let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
 
 
 
@@ -518,6 +503,44 @@ if has("eval")
     endif
 endif
 
+
+if has("win32")
+"   tagtoggle
+" Added to ~/ctags.cnf (On Win7):
+" --langdef=powershell
+" --langmap=powershell:.ps1.psm1
+" --regex-powershell=/^[Ff]unction[\t ]*([a-zA-Z0-9_-]+)/\1/f,function/
+" --regex-powershell=/^[Ff]ilter[\t ]*([a-zA-Z0-9_-]+)/\1/i,filter/
+" --regex-powershell=/^[sS]et-[Aa]lias[\t ]*([a-zA-Z0-9_-]+)/\1/a,alias/
+    let g:tagbar_type_ps1 = {
+                \ 'ctagstype' : 'powershell',
+                \ 'kinds'     : [
+                \ 'f:function',
+                \ 'i:filter',
+                \ 'a:alias'
+                \ ]
+                \ }
+" ctrlp
+    let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
+    set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
+else
+    " ctrlp
+    set wildignore+=*/tmp/*,*.so,*.pyc,*.pyo,*.swp,*.zip     " Linux/MacOSX
+    let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
+endif
+
+""""""""""""""""""""""""""""""""""""""
+"   ctrlp
+""""""""""""""""""""""""""""""""""""""
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlP'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+let g:ctrlp_custom_ignore = {
+	\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+	\ 'file': '\v\.(exe|so|dll)$',
+	\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
+	\ }
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""
