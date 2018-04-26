@@ -10,9 +10,18 @@
 [submodule "pack/plugins/opt/cscope"]
 	path = pack/plugins/opt/cscope
 	url = https://github.com/SpaceVim/cscope.vim.git
-[submodule "pack/plugins/start/SimpylFold"]
-	path = pack/plugins/opt/SimpylFold
-	url = https://github.com/tmhedberg/SimpylFold.git
+#[submodule "pack/plugins/start/SimpylFold"]
+#	path = pack/plugins/opt/SimpylFold
+#	url = https://github.com/tmhedberg/SimpylFold.git
 [submodule "pack/plugins/start/tagbar"]
 	path = pack/plugins/start/tagbar
 	url = https://github.com/majutsushi/tagbar.git
+[submodule "pack/plugins/start/bufexplorer"]
+	path = pack/plugins/start/bufexplorer
+	url = https://github.com/jlanzarotta/bufexplorer.git
+[submodule "pack/plugins/start/winmanager"]
+	path = pack/plugins/start/winmanager
+	url = https://github.com/vim-scripts/winmanager.git
+[submodule "pack/plugins/start/ag"]
+	path = pack/plugins/start/ag
+	url = https://github.com/rking/ag.vim.git

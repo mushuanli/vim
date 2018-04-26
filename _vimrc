@@ -12,7 +12,7 @@ endif
 " GENERAL SETTINGS
 "
 
-map <silent> <F1>    :NERDTreeToggle<cr>
+map <silent> <F1>    :WMToggle<cr>
 map <silent> <F2>    :TagbarToggle<cr>
 map <silent> <F3>    zO
 map <silent> <F4>    zc
@@ -408,12 +408,22 @@ let g:html_number_lines=0
 """""""""""""""""""""""""""""""""""""""
 "   ≤Âº˛≈‰÷√
 """""""""""""""""""""""""""""""""""""""
-"   taglist,	œ‘ æ‘⁄”“±ﬂ
-let Tlist_Use_Right_Window=0
-"let Tlist_WinWidth = 20
-"let Tlist_Inc_Winwidth = 0
-let Tlist_Enable_Fold_Column = 0
-let g:defaultExplorer=0
+let g:winManagerWindowLayout='NERDTree|BufExplorer'
+let g:winManagerWidth = 25
+let g:defaultExplorer = 0
+autocmd BufWinEnter \[Buf\ List\] setl nonumber
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
 
 "-----------------------------------------------------------------------
 " plugin / script / app settings
