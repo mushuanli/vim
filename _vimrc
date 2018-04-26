@@ -12,7 +12,11 @@ endif
 " GENERAL SETTINGS
 "
 
+if s:is_windows
 map <silent> <F1>    :WMToggle<cr>
+else
+map <silent> <F1>    :NERDTreeToggle<cr>
+endif
 map <silent> <F2>    :TagbarToggle<cr>
 map <silent> <F3>    zO
 map <silent> <F4>    zc
