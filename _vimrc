@@ -408,10 +408,38 @@ let g:html_number_lines=0
 """""""""""""""""""""""""""""""""""""""
 "   ≤Âº˛≈‰÷√
 """""""""""""""""""""""""""""""""""""""
-let g:winManagerWindowLayout='NERDTree|BufExplorer'
+let g:NERDTree_title='NERD Tree'  
+let g:winManagerWindowLayout='NERDTree|BufExplorer'  
+function! NERDTree_Start()  
+    exe 'q'
+    exec 'NERDTree'  
+endfunction
+
+function! NERDTree_IsValid()  
+    return 1  
+endfunction
+
+let g:Tagbar_title = "[Tagbar]"
+function! Tagbar_Start()
+    exe 'q'
+    exe 'TagbarOpen'
+endfunction
+
+
+function! Tagbar_IsValid()
+    return 1
+endfunction
+
 let g:winManagerWidth = 25
 let g:defaultExplorer = 0
 autocmd BufWinEnter \[Buf\ List\] setl nonumber
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Config BufExplorer
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let g:bufExplorerDefaultHelp=0       " Do not show default help.
+let g:bufExplorerShowRelativePath=1  " Show relative paths.
+let g:bufExplorerSortBy='mru'        " Sort by most recently used.
 
 " The Silver Searcher
 if executable('ag')
