@@ -83,6 +83,9 @@ set whichwrap+=<,>,[,]
 set textwidth=0         " no forced wrapping in any file type (unless overridden)
 set showcmd             " show length of visual selection (docs recommended
                         " keeping this off when working over slow connections)
+" Speed up macros
+set lazyredraw
+
 set complete=.,w,b,u    " make autocomplete faster - http://www.mail-archive.com/vim@vim.org/msg03963.html
 set splitright          " create vertical splits to the right
 set splitbelow          " create horizontal splits below
@@ -312,19 +315,6 @@ if has("autocmd")
                 \     setlocal statusline+=%=%2*\ %<%P |
                 \ endif
 
-    fun! <SID>FixMiniBufExplorerTitle()
-        if "-MiniBufExplorer-" == bufname("%")
-            setlocal statusline=%2*%-3.3n%0*
-            setlocal statusline+=\[Buffers\]
-            setlocal statusline+=%=%2*\ %<%P
-        endif
-    endfun
-
-
-    au BufWinEnter *
-                \ let oldwinnr=winnr() |
-                \ windo call <SID>FixMiniBufExplorerTitle() |
-                \ exec oldwinnr . " wincmd w"
 endif
 
 " Nice window title
@@ -439,9 +429,23 @@ let g:defaultExplorer = 0
 autocmd BufWinEnter \[Buf\ List\] setl nonumber
 
 " ack
+"<Leader>c进行搜索，同时不自动打开第一个匹配的文件"
+map <Leader>c :Ack!<Space> 
+"调用ag进行搜索
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 endif
+"高亮搜索关键词
+let g:ackhighlight = 1
+"修改快速预览窗口高度为15
+let g:ack_qhandler = "botright copen 15"
+"在QuickFix窗口使用快捷键以后，自动关闭QuickFix窗口
+let g:ack_autoclose = 1
+"使用ack的空白搜索，即不添加任何参数时对光标下的单词进行搜索，默认值为1，表示开启，置0以后使用空白搜索将返回错误信息
+let g:ack_use_cword_for_empty_search = 1
+"部分功能受限，但对于大项目搜索速度较慢时可以尝试开启
+"let g:ack_use_dispatch = 1
+
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Config BufExplorer
@@ -482,49 +486,6 @@ if has("eval")
 
     " eruby options
     au Syntax * hi link erubyRubyDelim Directory
-
-    " Settings for taglist.vim
-    let Tlist_Use_Right_Window=1
-    let Tlist_Auto_Open=0
-    let Tlist_Enable_Fold_Column=0
-    let Tlist_Compact_Format=1
-    let Tlist_WinWidth=28
-    let Tlist_Exit_OnlyWindow=1
-    let Tlist_File_Fold_Auto_Close = 1
-    "  nnoremap <silent> <F9> :Tlist<CR>
-
-    "	     " Settings minibufexpl.vim
-    "	     let g:miniBufExplModSelTarget = 1
-    "	     let g:miniBufExplWinFixHeight = 1
-    "	     let g:miniBufExplWinMaxSize = 1
-    "	     " let g:miniBufExplForceSyntaxEnable = 1
-
-    " Settings for showmarks.vim
-    if s:is_gui
-        let g:showmarks_enable=1
-    else
-        let g:showmarks_enable=0
-        let loaded_showmarks=1
-    endif
-
-    let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
-
-    if has("autocmd")
-        fun! <SID>FixShowmarksColours()
-            if has('gui')
-                hi ShowMarksHLl gui=bold guifg=#a0a0e0 guibg=#2e2e2e
-                hi ShowMarksHLu gui=none guifg=#a0a0e0 guibg=#2e2e2e
-                hi ShowMarksHLo gui=none guifg=#a0a0e0 guibg=#2e2e2e
-                hi ShowMarksHLm gui=none guifg=#a0a0e0 guibg=#2e2e2e
-                hi SignColumn   gui=none guifg=#f0f0f8 guibg=#2e2e2e
-            endif
-        endfun
-        if v:version >= 700
-            autocmd VimEnter,Syntax,ColorScheme * call <SID>FixShowmarksColours()
-        else
-            autocmd VimEnter,Syntax * call <SID>FixShowmarksColours()
-        endif
-    endif
 
     " Settings for explorer.vim
     let g:explHideFiles='^\.'
@@ -599,13 +560,34 @@ endif
 """"""""""""""""""""""""""""""""""""""
 let g:ctrlp_map = '<c-p>'
 let g:ctrlp_cmd = 'CtrlP'
-let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_custom_ignore = '\v[\/]\.(git|hg|svn)$'
+
+"<Leader>f搜索MRU文件
+nmap <Leader>f :CtrlPMRUFiles<CR>
+"<Leader>b显示缓冲区文件，并可通过序号进行跳转
+nmap <Leader>b :CtrlPBuffer<CR>
+"设置搜索时忽略的文件
 let g:ctrlp_custom_ignore = {
-	\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-	\ 'file': '\v\.(exe|so|dll)$',
+    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+    \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
 	\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
-	\ }
+    \ }
+let g:ctrlp_working_path_mode = 0
+let g:ctrlp_match_window_bottom = 1
+"修改QuickFix窗口显示的最大条目数
+let g:ctrlp_max_height = 15
+let g:ctrlp_match_window_reversed = 0
+"设置MRU最大条目数为500
+let g:ctrlp_mruf_max = 500
+let g:ctrlp_follow_symlinks = 1
+"默认使用全路径搜索，置1后按文件名搜索，准确率会有所提高，可以用<C-d>进行切换
+let g:ctrlp_by_filename = 1
+"默认不使用正则表达式，置1改为默认使用正则表达式，可以用<C-r>进行切换
+let g:ctrlp_regexp = 0
+"自定义搜索列表的提示符
+let g:ctrlp_line_prefix = '? '
+
+
 
 set diffexpr=MyDiff()
 function MyDiff()
@@ -644,8 +626,6 @@ endfunction
 
 " set showfulltag	    " Show full tags when doing search completion
 
-" Speed up macros
-set lazyredraw
 
 " Try to show at least three lines and two columns of context when
 " scrolling
