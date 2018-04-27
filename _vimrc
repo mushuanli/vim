@@ -438,6 +438,11 @@ let g:winManagerWidth = 25
 let g:defaultExplorer = 0
 autocmd BufWinEnter \[Buf\ List\] setl nonumber
 
+" ack
+if executable('ag')
+  let g:ackprg = 'ag --vimgrep'
+endif
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Config BufExplorer
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""

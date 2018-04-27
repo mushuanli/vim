@@ -22,6 +22,6 @@
 [submodule "pack/plugins/start/winmanager"]
 	path = pack/plugins/start/winmanager
 	url = https://github.com/vim-scripts/winmanager.git
-[submodule "pack/plugins/start/ag"]
-	path = pack/plugins/start/ag
-	url = https://github.com/rking/ag.vim.git
+[submodule "pack/plugins/start/ack"]
+	path = pack/plugins/start/ack
+	url = https://github.com/mileszs/ack.vim.git
