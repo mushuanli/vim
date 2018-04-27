@@ -3,10 +3,20 @@ set nocompatible
 let s:is_windows = (has("win32") || has("win64"))
 let s:is_gui = has("gui_running")
 
+if s:is_windows
+  source $VIMRUNTIME/vimrc_example.vim
+  source $VIMRUNTIME/mswin.vim
+  behave mswin
+endif
+
+behave xterm
+
 " SYNTAX HIGHLIGHTING... on if terminal has colors
 if &t_Co > 2 || s:is_gui
     syntax on
 endif
+
+
 
 "_________________________________________________________________________
 " GENERAL SETTINGS
@@ -44,7 +54,7 @@ set ffs=unix,dos
 set fencs=cp936,ucs-bom,default,latin1,utf-8    ",ucs-bom
 set langmenu=none	" 使用英文菜单
 set tw=0
-set selection=inclusive
+"set selection=exclusive
 
 set autoindent          " copy indent from the current line when starting a new line
 set nosmartindent
@@ -61,7 +71,7 @@ set incsearch           " while typing a search command, show matches incrementa
 set scs		        " 查找时智能大小写
 set hlsearch	        " hlsearch, 高亮显示查找结果
 
-set mouse=a             " enable mouse interaction
+"set mouse=a             " enable mouse interaction
 set mousehide		" Hide the mouse when typing text
 set number              " line numbers at the side
 set ruler               " show the cursor position all the time
@@ -133,17 +143,12 @@ endif
 set backup    " enable backup and define the backup file
 set backupext=.bak
 
-behave xterm
 
 if s:is_windows
-    source $VIMRUNTIME/vimrc_example.vim
-    source $VIMRUNTIME/mswin.vim
-
     "set nobackup
     set dir=D:\\tmp\\vim\\swap
     set backupdir=D:\tmp\vim\bak
     set undodir=D:\\tmp\\vim\\swap
-    "behave mswin
 
     let s:vimrc_path = fnamemodify(resolve(expand('<sfile>:p')), ':h')
     let $PATH = $PATH . ";" . s:vimrc_path . '\bin'
@@ -199,18 +204,6 @@ if has("autocmd")
 endif
 
 
-"NERD Tree
-let NERDChristmasTree=0
-let NERDTreeAutoCenter=1
-let NERDTreeBookmarksFile=$VIM.'\Data\NerdBookmarks.txt'
-let NERDTreeMouseMode=2
-let NERDTreeShowBookmarks=1
-let NERDTreeShowFiles=1
-let NERDTreeShowHidden=0
-let NERDTreeShowLineNumbers=1
-let NERDTreeIgnore=['\.svn$','\.o$','\.ko$','\.cmd$','\~$','\.pyc$','\.pyo$']
-let NERDTreeWinPos = "left" "where NERD tree window is placed on the screen
-let NERDTreeWinSize = 31 "size of the NERD tree
 
 
 """""""""""""""""""""""""""""""""""""""
@@ -402,6 +395,7 @@ let g:html_number_lines=0
 """""""""""""""""""""""""""""""""""""""
 "   插件配置
 """""""""""""""""""""""""""""""""""""""
+"   WinManager
 let g:NERDTree_title='NERD Tree'  
 let g:winManagerWindowLayout='NERDTree|BufExplorer'  
 function! NERDTree_Start()  
@@ -428,12 +422,26 @@ let g:winManagerWidth = 25
 let g:defaultExplorer = 0
 autocmd BufWinEnter \[Buf\ List\] setl nonumber
 
+
+"   NERD Tree
+let NERDChristmasTree=0
+let NERDTreeAutoCenter=1
+let NERDTreeBookmarksFile=$VIM.'\Data\NerdBookmarks.txt'
+let NERDTreeMouseMode=2
+let NERDTreeShowBookmarks=1
+let NERDTreeShowFiles=1
+let NERDTreeShowHidden=0
+let NERDTreeShowLineNumbers=1
+let NERDTreeIgnore=['\.svn$','\.o$','\.ko$','\.cmd$','\~$','\.pyc$','\.pyo$']
+let NERDTreeWinPos = "left" "where NERD tree window is placed on the screen
+let NERDTreeWinSize = 31 "size of the NERD tree
+
 " ack
 "<Leader>c进行搜索，同时不自动打开第一个匹配的文件"
 map <Leader>c :Ack!<Space> 
 "调用ag进行搜索
 if executable('ag')
-  let g:ackprg = 'ag --vimgrep'
+  let g:ackprg = 'ag --vimgrep --ignore-dir=third'
 endif
 "高亮搜索关键词
 let g:ackhighlight = 1
@@ -454,17 +462,6 @@ let g:bufExplorerDefaultHelp=0       " Do not show default help.
 let g:bufExplorerShowRelativePath=1  " Show relative paths.
 let g:bufExplorerSortBy='mru'        " Sort by most recently used.
 
-" The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
-
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-
-  " ag is fast enough that CtrlP doesn't need to cache
-  let g:ctrlp_use_caching = 0
-endif
 
 "-----------------------------------------------------------------------
 " plugin / script / app settings
@@ -568,7 +565,7 @@ nmap <Leader>f :CtrlPMRUFiles<CR>
 nmap <Leader>b :CtrlPBuffer<CR>
 "设置搜索时忽略的文件
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)$',
+    \ 'dir':  '\v[\/]\.(git|hg|svn|rvm)\|third$',
     \ 'file': '\v\.(exe|so|dll|zip|tar|tar.gz|pyc)$',
 	\ 'link': 'SOME_BAD_SYMBOLIC_LINKS',
     \ }
@@ -586,6 +583,18 @@ let g:ctrlp_by_filename = 1
 let g:ctrlp_regexp = 0
 "自定义搜索列表的提示符
 let g:ctrlp_line_prefix = '? '
+
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+endif
 
 
 
