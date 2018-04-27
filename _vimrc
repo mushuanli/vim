@@ -33,6 +33,7 @@ map <silent> <F4>    zc
 map <silent> <F5>    zR
 map <silent> <F6>    zM
 map <silent> <F7>    :cn<CR>
+
 "map <F12>   :NERDTreeToggle<CR>
 nmap <silent> <C-S-tab> :tabprevious<CR>
 nmap <silent> <C-tab>   :tabnext<CR>
@@ -40,6 +41,14 @@ map  <silent> <C-S-tab> :tabprevious<CR>
 map  <silent> <C-tab>   :tabnext<CR>
 imap <silent> <C-S-tab> <ESC>:tabprevious<CR>i
 imap <silent> <C-tab>   <ESC>:tabnext<CR>i
+
+"nmap   <silent> <S-Right>  :bnext<CR>
+" Make <space> in normal mode go down a page rather than left a
+" character
+noremap <space> <C-f>
+
+"<Leader>c进行搜索，同时不自动打开第一个匹配的文件"
+map <Leader>c :Ack!<Space> 
 
 nmap <s-down>   <c-w>w
 nmap <s-up>     <c-w>W
@@ -437,8 +446,6 @@ let NERDTreeWinPos = "left" "where NERD tree window is placed on the screen
 let NERDTreeWinSize = 31 "size of the NERD tree
 
 " ack
-"<Leader>c进行搜索，同时不自动打开第一个匹配的文件"
-map <Leader>c :Ack!<Space> 
 "调用ag进行搜索
 if executable('ag')
   let g:ackprg = 'ag --vimgrep --ignore-dir=third'
@@ -543,13 +550,6 @@ if s:is_windows
                 \ 'a:alias'
                 \ ]
                 \ }
-" ctrlp
-    let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'  " Windows
-    set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe  " Windows
-else
-    " ctrlp
-    set wildignore+=*/tmp/*,*.so,*.pyc,*.pyo,*.swp,*.zip     " Linux/MacOSX
-    let g:ctrlp_user_command = 'find %s -type f'        " MacOSX/Linux
 endif
 
 """"""""""""""""""""""""""""""""""""""
@@ -632,83 +632,6 @@ endfunction
 "	其它不用的
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 
-
-" set showfulltag	    " Show full tags when doing search completion
-
-
-" Try to show at least three lines and two columns of context when
-" scrolling
-" set scrolloff=3
-" set sidescrolloff=2
-
-"-------------------------------------------------------------------------------
-" Use of dictionaries
-"	 "-----------------------------------------------------------------------
-"	 " final commands
-"	 "-----------------------------------------------------------------------
-"	 " mio
-"	 let Tlist_Ctags_Cmd="/usr/bin/exuberant-ctags"
-"	 " plegado ident para python
-"	 au FileType python set foldmethod=indent
-"	 " plegado syntax para sgml,htmls,xml y xsl
-"	 au Filetype html,xml,xsl,sgml,docbook
-"	 " explorador vertical
-"	 let g:explVertical=1
-"	 " define leader como =
-"	 let mapleader = "="
-"	
-"	 map <S-F2> :vsplit ~/.vim/ref_full.vim<CR>
-"	 map <F2> :11vsplit ~/.vim/ref.vim<CR>
-"	 map <F3> :Sexplore /home/bass/<CR>
-"	 map <S-F3> :2split ~/.vim/fun_ref.vim<CR>
-"	 map <F4> :set nu<CR>
-"	 map <S-F4> :set nu!<CR>
-"	 map <F5> ggVGg?
-"	 map <F6> :set encoding=utf-8<CR> | :set fenc=utf-8<CR>
-"	 map <S-F6> :set encoding=iso8859-15<CR> | :set fenc=iso8859-15<CR>
-"	 map <F7> :SpellProposeAlternatives<CR>
-"	 map <S-F7> :SpellCheck<CR>
-"	 map <C-F7> :let spell_language_list = "english,spanish"
-"	 nnoremap <silent> <F8> :Tlist<CR>
-"	 nnoremap <silent> <S-F8> :TlistSync<CR>
-"	 map <F11> !!date<CR>
-"	 map <F12> :TC<CR>
-"	 nmap  :X        :x
-"	 nmap  :W        :w
-"	 nmap  :Q        :q
-"	 noremap <Leader>rg :color relaxedgreen<CR>
-"	 noremap <Leader>ip :color inkpot<CR>
-"	
-"	 " CVS
-"	 nmap <leader>cadd <Plug>CVSAdd
-"	 nmap <leader>cci <Plug>CVSCommit
-"	 nmap <leader>clog <Plug>CVSLog
-"	 map <leader>cre <Plug>CVSRevert
-"	 nmap <leader>cup <Plug>CVSUpdate
-"	 nmap <leader>cdiff <Plug>CVSDiff
-"	
-"	 " Spell
-"	 let spell_executable = "aspell"
-"	 let spell_language_list = "spanish,english"
-"	
-"	 " Comentiffy
-"	 let g:EnhCommentifyMultiPartBlocks = 'yes'
-"	 let g:EnhCommentifyAlignRight = 'yes'
-"	 " let g:EnhCommentifyRespectIndent = 'Yes'
-"	 let g:EnhCommentifyPretty = 'Yes'
-"	 " let g:EnhCommentifyUserBindings = 'yes'
-
-"-----------------------------------------------------------------------
-" vim: set shiftwidth=4 softtabstop=4 expandtab tw=72                  :
-
-
-" 
-" dictionary : List of file names that are used to lookup words
-"              for keyword completion commands
-"   complete : search the files defined by the 'dictionary' option
-"-------------------------------------------------------------------------------
-"
-"set complete+=k
 
 
 
