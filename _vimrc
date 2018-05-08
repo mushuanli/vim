@@ -21,7 +21,7 @@ endif
 "_________________________________________________________________________
 " GENERAL SETTINGS
 "
-
+if s:is_gui
 if s:is_windows
 map <silent> <F1>    :WMToggle<cr>
 else
@@ -33,6 +33,24 @@ map <silent> <F4>    zc
 map <silent> <F5>    zR
 map <silent> <F6>    zM
 map <silent> <F7>    :cn<CR>
+else
+map <silent> <leader>1   :WMToggle<cr>
+map <silent> <leader>2   :TagbarToggle<cr>
+map <silent> <leader>3   zO<cr>
+map <silent> <leader>4   zc<cr>
+map <silent> <leader>5   zR<cr>
+map <silent> <leader>6   zM<cr>
+map <silent> <leader>7   :cn<cr>
+
+"   配置git的merge
+"   git config --global merge.tool vimdiff
+"   git config --global mergetool.prompt false
+"map <silent> <leader>1 :diffget 1<CR> :diffupdate<CR>
+"map <silent> <leader>2 :diffget 2<CR> :diffupdate<CR>
+"map <silent> <leader>3 :diffget 3<CR> :diffupdate<CR>
+"map <silent> <leader>4 :diffget 4<CR> :diffupdate<CR>
+
+endif
 
 "map <F12>   :NERDTreeToggle<CR>
 nmap <silent> <C-S-tab> :tabprevious<CR>
@@ -278,13 +296,6 @@ let g:is_bash	   = 1  " 如果没有#!行，缺省认为shell脚本用的是bash
 let perl_extended_vars=1 " highlight advanced perl vars inside strings
 
 
-"   配置git的merge
-"   git config --global merge.tool vimdiff
-"   git config --global mergetool.prompt false
-map <silent> <leader>1 :diffget 1<CR> :diffupdate<CR>
-map <silent> <leader>2 :diffget 2<CR> :diffupdate<CR>
-map <silent> <leader>3 :diffget 3<CR> :diffupdate<CR>
-map <silent> <leader>4 :diffget 4<CR> :diffupdate<CR>
 
 
 
