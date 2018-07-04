@@ -641,6 +641,13 @@ if s:is_windows
     endfunction
 endif
 
+" DirDiff
+let g:DirDiffExcludes = "CVS,*.class,*.exe,.*.swp"
+let g:DirDiffIgnore = "Id:,Revision:,Date:"
+let g:DirDiffIgnoreCase = 0
+let g:DirDiffForceLang = "C"
+let g:DirDiffWindowSize = 14
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""
 "	其它不用的
 """"""""""""""""""""""""""""""""""""""""""""""""""""

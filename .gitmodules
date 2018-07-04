@@ -25,3 +25,9 @@
 [submodule "pack/plugins/start/ack"]
 	path = pack/plugins/start/ack
 	url = https://github.com/mileszs/ack.vim.git
+[submodule "pack/plugins/start/dirdiff"]
+	path = pack/plugins/start/dirdiff
+	url = https://github.com/will133/vim-dirdiff.git
+[submodule "pack/plugins/start/bookmarks"]
+	path = pack/plugins/start/bookmarks
+	url = https://github.com/MattesGroeger/vim-bookmarks.git
