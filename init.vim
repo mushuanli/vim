@@ -13,16 +13,18 @@ if s:is_windows
   behave mswin
 endif
 behave xterm
+filetype plugin on
 
 
 call plug#begin()
 "# 这里写上需要安装的插键
-"Plug 'ctrlpvim/ctrlp.vim'
+Plug 'vim-airline/vim-airline'
+Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
 
-Plug 'vim-airline/vim-airline'
-Plug 'scrooloose/nerdtree'
+Plug 'jiangmiao/auto-pairs'
+Plug 'junegunn/vim-easy-align'
 call plug#end()
 "_________________________________________________________________________
 " GENERAL SETTINGS
@@ -34,8 +36,15 @@ map <silent> <F5>    zR
 map <silent> <F6>    zM
 map <silent> <F7>    :cn<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>r :Rg 
+nnoremap <C-p> :GFiles<CR>
+nnoremap <C-o> :Buffers<CR>
 
 "   edit
+set autoread              " read open files again when changed outside Vim
+set autowrite             " write a modified buffer on each shell
+set browsedir=current     " which directory to use for the file browser
+
 set scs		        " 查找时智能大小写
 set mouse=nvi             " enable mouse interaction
 set mousehide		" Hide the mouse when typing text
@@ -43,7 +52,25 @@ set number              " line numbers at the side
 set ruler               " show the cursor position all the time
 set splitright          " create vertical splits to the right
 set splitbelow          " create horizontal splits below
+set cursorline
 
+" fold
+set foldenable
+set foldmethod=indent   " marker,folder模式为语法
+autocmd FileType cpp,c setlocal foldmethod=syntax
+set foldlevelstart=2
+
+let javaScript_fold=1         " JavaScript
+let perl_fold=1               " Perl
+let ruby_fold=1               " Ruby
+let sh_fold_enabled=1         " sh
+let vimsyn_folding='af'       " Vim script
+let xml_syntax_folding=1      " XML
+
+set foldlevel=100       " Don't autofold anything (but I can still fold manually)
+set foldopen-=search    " don't open folds when you search into them
+set foldopen-=undo      " don't open folds when you undo stuff
+"set foldopen=block,hor,mark,percent,quickfix,search,tag " what movements open folds
 
 "   indent
 set autoindent          " copy indent from the current line when starting a new line
@@ -74,10 +101,15 @@ let g:NERDTreeStatusline = ''
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " FZF
-nnoremap <C-p> :GFiles<CR>
-nnoremap <C-o> :Buffers<CR>
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
   \ 'ctrl-v': 'vsplit'
   \}
+" vim-easy-align
+vmap <Leader>a <Plug>(EasyAlign)
+nmap <Leader>a <Plug>(EasyAlign)
+if !exists('g:easy_align_delimiters')
+  let g:easy_align_delimiters = {}
+endif
+let g:easy_align_delimiters['#'] = { 'pattern': '#', 'ignore_groups': ['String'] }
