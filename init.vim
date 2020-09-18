@@ -1,4 +1,3 @@
-" nvim config file
 "right click to open[HKEY_CURRENT_USER\SOFTWARE\Classes\*\shell\Open with Neovim\command]
 "C:\tools\neovim\Neovim\bin\nvim-qt.exe "%1""
 " SYNTAX HIGHLIGHTING... on if terminal has colors
@@ -10,14 +9,14 @@ let s:is_windows = (has("win32") || has("win64"))
 let s:is_gui = has("gui_running")
 
 if s:is_windows
-  "source $VIMRUNTIME/vimrc_example.vim
   source $VIMRUNTIME/mswin.vim
   behave mswin
 endif
+behave xterm
 
 
 call plug#begin()
-" add require plugin, fzf need to intall fzf app
+"# 这里写上需要安装的插键
 "Plug 'ctrlpvim/ctrlp.vim'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
@@ -34,10 +33,11 @@ map <silent> <F4>    zc
 map <silent> <F5>    zR
 map <silent> <F6>    zM
 map <silent> <F7>    :cn<CR>
+nnoremap <leader>sv :source $MYVIMRC<CR>
 
 "   edit
 set scs		        " 查找时智能大小写
-set mouse=a             " enable mouse interaction
+set mouse=nvi             " enable mouse interaction
 set mousehide		" Hide the mouse when typing text
 set number              " line numbers at the side
 set ruler               " show the cursor position all the time
@@ -74,7 +74,8 @@ let g:NERDTreeStatusline = ''
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " FZF
-nnoremap <C-p> :FZF<CR>
+nnoremap <C-p> :GFiles<CR>
+nnoremap <C-o> :Buffers<CR>
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-s': 'split',
