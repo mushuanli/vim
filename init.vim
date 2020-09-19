@@ -1,12 +1,16 @@
-"right click to open[HKEY_CURRENT_USER\SOFTWARE\Classes\*\shell\Open with Neovim\command]
-"C:\tools\neovim\Neovim\bin\nvim-qt.exe "%1""
-" SYNTAX HIGHLIGHTING... on if terminal has colors
-" curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-"    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-" 
+"Windows:  right click to open[HKEY_CURRENT_USER\SOFTWARE\Classes\*\shell\Open with Neovim\command]
+"          C:\tools\neovim\Neovim\bin\nvim-qt.exe "%1""
+"      curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+" Mac:
+"      brew install neovim
+"      curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 let s:is_windows = (has("win32") || has("win64"))
 let s:is_gui = has("gui_running")
+
+if &compatible
+  set nocompatible               " Be iMproved
+endif
 
 if s:is_windows
   source $VIMRUNTIME/mswin.vim
@@ -15,8 +19,10 @@ endif
 behave xterm
 filetype plugin on
 
-
-call plug#begin()
+"_________________________________________________________________________
+" PACKAGE SETTINGS
+"
+call plug#begin('~/.vim/plugged')
 "# 这里写上需要安装的插键
 Plug 'vim-airline/vim-airline'
 Plug 'scrooloose/nerdtree'
@@ -26,6 +32,8 @@ Plug 'junegunn/fzf.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'junegunn/vim-easy-align'
 call plug#end()
+
+
 "_________________________________________________________________________
 " GENERAL SETTINGS
 "
@@ -39,6 +47,12 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 nnoremap <leader>r :Rg 
 nnoremap <C-p> :GFiles<CR>
 nnoremap <C-o> :Buffers<CR>
+
+"   color
+syntax enable
+set background=dark
+colorscheme solarized
+let g:solarized_termcolors=256
 
 "   edit
 set autoread              " read open files again when changed outside Vim
@@ -95,7 +109,8 @@ set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifestg,*.d
 "   NERDTree
 let g:NERDTreeShowHidden = 1
 let g:NERDTreeMinimalUI = 1
-let g:NERDTreeIgnore = []
+let g:NERDTreeGitStatusWithFlags = 1
+let g:NERDTreeIgnore = ['^node_modules$']
 let g:NERDTreeStatusline = ''
 " Automaticaly close nvim if NERDTree is only thing left open
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
