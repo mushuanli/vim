@@ -1,9 +1,12 @@
+" All:    mkdir 
 "Windows:  right click to open[HKEY_CURRENT_USER\SOFTWARE\Classes\*\shell\Open with Neovim\command]
 "          C:\tools\neovim\Neovim\bin\nvim-qt.exe "%1""
 "      curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"      edit %userprofile%\AppData\Local\nvim\init.vim
 " Mac:
 "      brew install neovim
 "      curl -fLo ~/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+"      mkdir -p ~/.config/nvim && vi ~/.config/nvim/init.vim
 
 let s:is_windows = (has("win32") || has("win64"))
 let s:is_gui = has("gui_running")
